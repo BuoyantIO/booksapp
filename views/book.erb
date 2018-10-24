@@ -1,0 +1,24 @@
+<div class="col-md-6">
+  <h2>
+    <%= @book.title %>
+    <small>by <a href="/authors/<%= @author.id %>"><%= @author.name %></a></small>
+  </h2>
+  <ul>
+    <li><%= @book.pages == 1 ? "1 page" : "#{@book.pages} pages" %></li>
+  </ul>
+  <hr>
+  <form action="/books/<%= @book.id %>/delete" method="POST"
+    onsubmit="return confirm('Delete <%= @book.title %>?');">
+    <div class="btn-group">
+      <a class="btn btn-default" href="/">
+        <span class="glyphicon glyphicon-arrow-left" title="Home"></span> Home
+      </a>
+      <a class="btn btn-default" href="/books/<%= @book.id %>/edit">
+        <span class="glyphicon glyphicon-edit" title="Edit"></span> Edit Book
+      </a>
+      <button type="submit" class="btn btn-default">
+        <span class="glyphicon glyphicon-remove" title="Delete"></span> Delete Book
+      </button>
+    </div>
+  </form>
+</div>
