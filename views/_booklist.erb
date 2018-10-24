@@ -1,0 +1,34 @@
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <th>Title</th>
+      <th>Author</th>
+      <th>Pages</th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @books.each do |book| %>
+    <% next unless author = @authors_by_id[book.author_id] %>
+      <tr>
+        <td><a href="/books/<%= book.id %>"><%= book.title %></a></td>
+        <td><a href="/authors/<%= author.id %>"><%= author.name %></a></td>
+        <td><%= book.pages %></td>
+        <td>
+          <a class="btn btn-link" href="/books/<%= book.id %>/edit">
+            <span class="glyphicon glyphicon-edit" title="Edit Book"></span>
+          </a>
+        </td>
+        <td>
+          <form action="/books/<%= book.id %>/delete" method="POST"
+            onsubmit="return confirm('Delete <%= book.title %>?');">
+            <button type="submit" class="btn btn-link">
+              <span class="glyphicon glyphicon-remove" title="Delete Book"></span>
+            </button>
+          </form>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>

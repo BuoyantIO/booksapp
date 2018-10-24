@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>Buoyant Books App</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <link rel="stylesheet" href="/css/app.css">
+    <link rel="icon" href="/images/favicon.ico" sizes="32x32">
+  </head>
+  <body>
+    <nav class="navbar navbar-inverse navbar-fixed-top">
+      <div class="container-fluid">
+        <div class="navbar-header">
+          <a class="navbar-brand" href="/">Buoyant Books App</a>
+        </div>
+      </div>
+    </nav>
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-md-12">
+          <% if flash[:notice] %>
+            <div class="alert alert-info" role="alert"><%= flash[:notice] %></div>
+          <% end %>
+          <% if flash[:warn] %>
+            <div class="alert alert-warning" role="alert"><%= flash[:warn] %></div>
+          <% end %>
+          <% if flash[:error] %>
+            <div class="alert alert-danger" role="alert"><%= flash[:error] %></div>
+          <% end %>
+        </div>
+      </div>
+      <div class="row">
+        <%= yield %>
+      </div>
+    </div>
+  </body>
+</html>

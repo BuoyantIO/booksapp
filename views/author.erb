@@ -1,0 +1,26 @@
+<div class="col-md-6">
+  <h2><%= @author.name %></h2>
+  <hr>
+  <% if @books.size > 0 %>
+    <h3>Books</h3>
+    <%= erb :_booklist %>
+    <hr>
+  <% end %>
+  <h3>Add a Book</h3>
+  <%= erb :_bookform, :locals => {:author_id => @author.id} %>
+  <hr>
+  <form action="/authors/<%= @author.id %>/delete" method="POST"
+    onsubmit="return confirm('Delete <%= @author.name %> (and all books)?');">
+    <div class="btn-group">
+      <a class="btn btn-default" href="/">
+        <span class="glyphicon glyphicon-arrow-left" title="Home"></span> Home
+      </a>
+      <a class="btn btn-default" href="/authors/<%= @author.id %>/edit">
+        <span class="glyphicon glyphicon-edit" title="Edit"></span> Edit Author
+      </a>
+      <button type="submit" class="btn btn-default">
+        <span class="glyphicon glyphicon-remove" title="Delete"></span> Delete Author
+      </button>
+    </div>
+  </form>
+</div>
