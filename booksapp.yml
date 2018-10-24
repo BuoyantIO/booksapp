@@ -189,7 +189,7 @@ spec:
     spec:
       containers:
       - name: mysql
-        image: mysql:5.7
+        image: mysql:5.6
         env:
         - name: MYSQL_ROOT_PASSWORD
           value: password
