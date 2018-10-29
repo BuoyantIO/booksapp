@@ -1,40 +1,96 @@
 # Buoyant Books App #
 
-Sample distributed Ruby app using Sinatra, ActiveRecord, and ActiveResource.
+This is a sample distributed (microservices) Ruby app using Sinatra,
+ActiveRecord, and ActiveResource. The app is designed to demonstrate the various
+value propositions of Linkerd 2.0 including debugging, observability, and
+monitoring. Some of the services in the app periodically fail. This is by design
+in order to demo debugging and monitoring in Linkerd 2.0.
+
+The application is composed of the following four services:
+
+* [webapp.rb](webapp.rb)
+* [authors.rb](authors.rb)
+* [books.rb](books.rb)
+* [traffic/main.go](traffic/main.go) (demo traffic generator, written in Go)
+
+![Books Application Topology](images/topo.png)
+
+---
 
 ## Running in Kubernetes ##
 
-You can run the app in Kubernetes, using the `booksapp.yml ` config.
+You can deploy the application to Kubernetes using the Linkerd 2.0 service mesh.
 
-    $ kubectl apply -f booksapp.yml
+1. Install the `linkerd` CLI
 
-Or, if you're using Linkerd:
+    ```bash
+    curl https://run.linkerd.io/install | sh
+    ```
 
-    $ linkerd inject booksapp.yml | kubectl apply -f -
+2. Install the Linkerd control plane
 
-It takes about a minute for the app to initialize.
+    ```bash
+    linkerd install | kubectl apply -f -
+    ```
+
+3. Inject and deploy the application
+
+    ```bash
+    curl https://run.linkerd.io/booksapp.yml | linkerd inject - | kubectl apply -f -
+    ```
+
+4. Use the app!
+
+    ```
+    kubectl port-forward svc/webapp 7000
+    open "http://localhost:7000"
+    ```
+
+5. View the Linkerd dashboard!
+
+    ```bash
+    linkerd dashboard
+    ```
+
+![Linkerd Dashboard](images/dashboard.png)
+
+---
 
 ## Running Locally ##
 
-Create, migrate, and seed the database:
+You can also run the application locally for development.
 
-    $ bundle install
-    $ bundle exec rake db:create
-    $ bundle exec rake db:migrate
-    $ bundle exec rake db:seed
+1. Create, migrate, and seed the database:
 
-Start the web app:
+    ```bash
+    bundle install
+    bundle exec rake db:create
+    bundle exec rake db:migrate
+    bundle exec rake db:seed
+    ```
 
-    $  bundle exec rake dev:webapp
+2. Start the web app:
 
-Start the authors app:
+    ```bash
+    bundle exec rake dev:webapp
+    ```
 
-    $ bundle exec rake dev:authors
+3. Start the authors app:
 
-Start the books app:
+    ```bash
+    bundle exec rake dev:authors
+    ```
 
-    $ bundle exec rake dev:books
+4. Start the books app:
 
-Open the website:
+    ```bash
+    bundle exec rake dev:books
+    ```
 
-    $ open "http://localhost:7000"
+5. Open the website:
+
+    ```bash
+    open "http://localhost:7000"
+    ```
+
+![Books App](images/booksapp.png)
