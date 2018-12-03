@@ -56,6 +56,31 @@ You can deploy the application to Kubernetes using the Linkerd 2.0 service mesh.
 
 ---
 
+## Service Profiles ##
+
+In order to record per-route metrics, you can create service profiles for the
+webapp, books, and authors services based on their Swagger specs:
+
+    ```bash
+    linkerd profile --open-api swagger/webapp.swagger webapp | kubectl apply -f -
+    linkerd profile --open-api swagger/books.swagger books | kubectl apply -f -
+    linkerd profile --open-api swagger/authors.swagger authors | kubectl apply -f -
+    ```
+
+You can then view route data for each service:
+
+    ```bash
+    linkerd routes webapp
+    ```
+
+    ```bash
+    linkerd books webapp
+    ```
+
+    ```bash
+    linkerd authors webapp
+    ```
+
 ## Running Locally ##
 
 You can also run the application locally for development.
