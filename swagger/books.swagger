@@ -29,3 +29,4 @@ paths:
         schema:
           type: integer
           format: int64
+
