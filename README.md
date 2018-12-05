@@ -74,11 +74,11 @@ You can then view route data for each service:
     ```
 
     ```bash
-    linkerd books webapp
+    linkerd routes books
     ```
 
     ```bash
-    linkerd authors webapp
+    linkerd routes authors
     ```
 
 ## Running Locally ##
