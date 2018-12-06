@@ -188,6 +188,8 @@ spec:
           value: booksapp
         - name: MYSQL_PASSWORD
           value: booksapp
+        - name: MYSQL_INITDB_SKIP_TZINFO
+          value: "1"
         ports:
         - containerPort: 3306
           name: mysql
