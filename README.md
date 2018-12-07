@@ -41,7 +41,7 @@ You can deploy the application to Kubernetes using the Linkerd 2.0 service mesh.
 
 4. Use the app!
 
-    ```
+    ```bash
     kubectl port-forward svc/webapp 7000
     open "http://localhost:7000"
     ```
@@ -53,6 +53,42 @@ You can deploy the application to Kubernetes using the Linkerd 2.0 service mesh.
     ```
 
 ![Linkerd Dashboard](images/dashboard.png)
+
+## Running with MySQL ##
+
+The default booksapp configuration uses SQLite. It's also possible to run the
+app with a MySQL backend, using the configs in the `k8s/` directory. The MySQL
+configuration uses a separate pod for the storage backend, which allows running
+multiple replicas of each of the app deployments.
+
+1. Start by installing the MySQL backend
+
+    ```bash
+    kubectl apply -f k8s/mysql-backend.yml
+    ```
+
+2. Verify that the mysql-init job successfully completes
+
+    ```bash
+    kubectl get po
+    NAME                    READY     STATUS      RESTARTS   AGE
+    mysql-9bd5bcfdf-7jb2s   1/1       Running     0          3m
+    mysql-init-29nxv        0/1       Completed   0          3m
+    ```
+
+3. Install Linkerd as described above; install the app configured to use MySQL
+
+    ```bash
+    linkerd install | kubectl apply -f -
+    linkerd inject k8s/mysql-app.yml | kubectl apply -f -
+    ```
+
+4. Use the app!
+
+    ```bash
+    kubectl port-forward svc/webapp 7000
+    open "http://localhost:7000"
+    ```
 
 ---
 
@@ -85,7 +121,7 @@ You can then view route data for each service:
 
 You can also run the application locally for development.
 
-1. Create, migrate, and seed the database:
+1. Create, migrate, and seed the database
 
     ```bash
     bundle install
@@ -94,28 +130,48 @@ You can also run the application locally for development.
     bundle exec rake db:seed
     ```
 
-2. Start the web app:
+2. Start the web app
 
     ```bash
     bundle exec rake dev:webapp
     ```
 
-3. Start the authors app:
+3. Start the authors app
 
     ```bash
     bundle exec rake dev:authors
     ```
 
-4. Start the books app:
+4. Start the books app
 
     ```bash
     bundle exec rake dev:books
     ```
 
-5. Open the website:
+5. Open the website
 
     ```bash
     open "http://localhost:7000"
     ```
 
 ![Books App](images/booksapp.png)
+
+## Administration
+
+### Docker
+
+All of the Docker images used for this application are already published
+publicly and don't need to be built by hand. If you'd like to build the images
+locally follow the instructions below.
+
+1. Build the `buoyantio/booksapp` image
+
+    ```bash
+    docker build -t buoyantio/booksapp:latest .
+    ```
+
+2. Build the `buoyantio/booksapp-traffic` image
+
+    ```bash
+    docker build -t buoyantio/booksapp-traffic:latest traffic
+    ```
