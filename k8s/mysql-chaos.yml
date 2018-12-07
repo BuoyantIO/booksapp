@@ -1,0 +1,84 @@
+#
+# Chaos monkey for booksapp
+#
+kind: ServiceAccount
+apiVersion: v1
+metadata:
+  name: chaos
+---
+kind: Role
+apiVersion: rbac.authorization.k8s.io/v1beta1
+metadata:
+  name: booksapp:chaos
+rules:
+- apiGroups: [""]
+  resources: ["pods"]
+  verbs: ["delete", "get"]
+---
+kind: RoleBinding
+apiVersion: rbac.authorization.k8s.io/v1beta1
+metadata:
+  name: booksapp:chaos
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: booksapp:chaos
+subjects:
+- kind: ServiceAccount
+  name: chaos
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: chaos
+data:
+  chaos: |-
+    #!/bin/sh
+
+    while true; do
+      PODS=$(kubectl -n $BOOKS_NS get po --field-selector=status.phase=Running --selector='app in (authors, books, webapp)' -o jsonpath='{.items[*].metadata.name}')
+
+      POD_COUNT=$(echo "${PODS}" | awk -F" " '{print NF}')
+      echo "found ${POD_COUNT} running pods"
+
+      let "RAND = $RANDOM % $POD_COUNT + 1"
+      POD=$(echo $PODS | cut -d' ' -f$RAND)
+
+      kubectl -n $BOOKS_NS delete po/$POD
+
+      sleep 10
+    done
+---
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  labels:
+    app: chaos
+  name: chaos
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: chaos
+    spec:
+      serviceAccount: chaos
+      containers:
+      - image: lachlanevenson/k8s-kubectl:v1.10.3
+        imagePullPolicy: IfNotPresent
+        name: chaos
+        command:
+        - "/data/chaos"
+        env:
+        - name: BOOKS_NS
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.namespace
+        volumeMounts:
+        - name: chaos
+          mountPath: /data
+      volumes:
+      - name: chaos
+        configMap:
+          name: chaos
+          defaultMode: 0744
