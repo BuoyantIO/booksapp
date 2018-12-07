@@ -1,4 +1,4 @@
-# Buoyant Books App #
+# Buoyant Books App
 
 This is a sample distributed (microservices) Ruby app using Sinatra,
 ActiveRecord, and ActiveResource. The app is designed to demonstrate the various
@@ -17,7 +17,7 @@ The application is composed of the following four services:
 
 ---
 
-## Running in Kubernetes ##
+## Running in Kubernetes
 
 You can deploy the application to Kubernetes using the Linkerd 2.0 service mesh.
 
@@ -54,7 +54,7 @@ You can deploy the application to Kubernetes using the Linkerd 2.0 service mesh.
 
 ![Linkerd Dashboard](images/dashboard.png)
 
-## Running with MySQL ##
+## Running with MySQL
 
 The default booksapp configuration uses SQLite. It's also possible to run the
 app with a MySQL backend, using the configs in the `k8s/` directory. The MySQL
@@ -92,7 +92,7 @@ multiple replicas of each of the app deployments.
 
 ---
 
-## Service Profiles ##
+## Service Profiles
 
 In order to record per-route metrics, you can create service profiles for the
 webapp, books, and authors services based on their Swagger specs:
@@ -117,7 +117,7 @@ You can then view route data for each service:
     linkerd routes authors
     ```
 
-## Running Locally ##
+## Running Locally
 
 You can also run the application locally for development.
 
@@ -155,6 +155,16 @@ You can also run the application locally for development.
     ```
 
 ![Books App](images/booksapp.png)
+
+## Deploy Chaos Monkey
+
+This repo includes a Chaos Monkey script, that randomly kills a pod every 10
+seconds. It is intended to be run with the Kubernetes / MySQL configuration. To
+deploy, run:
+
+    ```bash
+    kubectl apply -f k8s/mysql-chaos.yml
+    ```
 
 ## Administration
 
