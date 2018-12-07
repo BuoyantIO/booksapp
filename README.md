@@ -57,7 +57,9 @@ You can deploy the application to Kubernetes using the Linkerd 2.0 service mesh.
 ## Running with MySQL ##
 
 The default booksapp configuration uses SQLite. It's also possible to run the
-app with a MySQL backend, using the configs in the `k8s/` directory.
+app with a MySQL backend, using the configs in the `k8s/` directory. The MySQL
+configuration uses a separate pod for the storage backend, which allows running
+multiple replicas of each of the app deployments.
 
 1. Start by installing the MySQL backend
 
@@ -74,10 +76,11 @@ app with a MySQL backend, using the configs in the `k8s/` directory.
     mysql-init-29nxv        0/1       Completed   0          3m
     ```
 
-3. Install the app configured for MySQL
+3. Install Linkerd as described above; install the app configured to use MySQL
 
     ```bash
-    kubectl apply -f k8s/mysql-app.yml
+    linkerd install | kubectl apply -f -
+    linkerd inject k8s/mysql-app.yml | kubectl apply -f -
     ```
 
 4. Use the app!
@@ -118,7 +121,7 @@ You can then view route data for each service:
 
 You can also run the application locally for development.
 
-1. Create, migrate, and seed the database:
+1. Create, migrate, and seed the database
 
     ```bash
     bundle install
@@ -127,28 +130,48 @@ You can also run the application locally for development.
     bundle exec rake db:seed
     ```
 
-2. Start the web app:
+2. Start the web app
 
     ```bash
     bundle exec rake dev:webapp
     ```
 
-3. Start the authors app:
+3. Start the authors app
 
     ```bash
     bundle exec rake dev:authors
     ```
 
-4. Start the books app:
+4. Start the books app
 
     ```bash
     bundle exec rake dev:books
     ```
 
-5. Open the website:
+5. Open the website
 
     ```bash
     open "http://localhost:7000"
     ```
 
 ![Books App](images/booksapp.png)
+
+## Administration
+
+### Docker
+
+All of the Docker images used for this application are already published
+publicly and don't need to be built by hand. If you'd like to build the images
+locally follow the instructions below.
+
+1. Build the `buoyantio/booksapp` image
+
+    ```bash
+    docker build -t buoyantio/booksapp:latest .
+    ```
+
+2. Build the `buoyantio/booksapp-traffic` image
+
+    ```bash
+    docker build -t buoyantio/booksapp-traffic:latest traffic
+    ```
