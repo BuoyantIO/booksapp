@@ -28,7 +28,7 @@ spec:
         image: buoyantio/booksapp:v0.0.2
         env:
         - name: DATABASE_URL
-          value: sqlite3:db/db.sqlite3
+          value: mysql2://booksapp:booksapp@mysql:3306/booksapp_production
         - name: AUTHORS_SITE
           value: http://authors:7001
         - name: BOOKS_SITE
@@ -59,7 +59,7 @@ apiVersion: extensions/v1beta1
 metadata:
   name: authors
 spec:
-  replicas: 1
+  replicas: 3
   template:
     metadata:
       labels:
@@ -71,7 +71,7 @@ spec:
         image: buoyantio/booksapp:v0.0.2
         env:
         - name: DATABASE_URL
-          value: sqlite3:db/db.sqlite3
+          value: mysql2://booksapp:booksapp@mysql:3306/booksapp_production
         - name: BOOKS_SITE
           value: http://books:7002
         - name: FAILURE_RATE
@@ -102,7 +102,7 @@ apiVersion: extensions/v1beta1
 metadata:
   name: books
 spec:
-  replicas: 1
+  replicas: 3
   template:
     metadata:
       labels:
@@ -114,7 +114,7 @@ spec:
         image: buoyantio/booksapp:v0.0.2
         env:
         - name: DATABASE_URL
-          value: sqlite3:db/db.sqlite3
+          value: mysql2://booksapp:booksapp@mysql:3306/booksapp_production
         - name: AUTHORS_SITE
           value: http://authors:7001
         args: ["prod:books"]
@@ -142,5 +142,4 @@ spec:
       - name: traffic
         image: buoyantio/booksapp-traffic:v0.0.2
         args:
-        - "-initial-delay=30s"
         - "webapp:7000"

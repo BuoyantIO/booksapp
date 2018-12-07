@@ -41,7 +41,7 @@ You can deploy the application to Kubernetes using the Linkerd 2.0 service mesh.
 
 4. Use the app!
 
-    ```
+    ```bash
     kubectl port-forward svc/webapp 7000
     open "http://localhost:7000"
     ```
@@ -53,6 +53,39 @@ You can deploy the application to Kubernetes using the Linkerd 2.0 service mesh.
     ```
 
 ![Linkerd Dashboard](images/dashboard.png)
+
+## Running with MySQL ##
+
+The default booksapp configuration uses SQLite. It's also possible to run the
+app with a MySQL backend, using the configs in the `k8s/` directory.
+
+1. Start by installing the MySQL backend
+
+    ```bash
+    kubectl apply -f k8s/mysql-backend.yml
+    ```
+
+2. Verify that the mysql-init job successfully completes
+
+    ```bash
+    kubectl get po
+    NAME                    READY     STATUS      RESTARTS   AGE
+    mysql-9bd5bcfdf-7jb2s   1/1       Running     0          3m
+    mysql-init-29nxv        0/1       Completed   0          3m
+    ```
+
+3. Install the app configured for MySQL
+
+    ```bash
+    kubectl apply -f k8s/mysql-app.yml
+    ```
+
+4. Use the app!
+
+    ```bash
+    kubectl port-forward svc/webapp 7000
+    open "http://localhost:7000"
+    ```
 
 ---
 
