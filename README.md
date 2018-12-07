@@ -90,6 +90,17 @@ multiple replicas of each of the app deployments.
     open "http://localhost:7000"
     ```
 
+
+### Deploy Chaos Monkey
+
+This repo includes a Chaos Monkey script, that randomly kills a pod every 10
+seconds. It is intended to be run with the Kubernetes / MySQL configuration. To
+deploy, run:
+
+    ```bash
+    kubectl apply -f k8s/mysql-chaos.yml
+    ```
+
 ---
 
 ## Service Profiles
@@ -155,16 +166,6 @@ You can also run the application locally for development.
     ```
 
 ![Books App](images/booksapp.png)
-
-## Deploy Chaos Monkey
-
-This repo includes a Chaos Monkey script, that randomly kills a pod every 10
-seconds. It is intended to be run with the Kubernetes / MySQL configuration. To
-deploy, run:
-
-    ```bash
-    kubectl apply -f k8s/mysql-chaos.yml
-    ```
 
 ## Administration
 
