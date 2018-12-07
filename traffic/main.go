@@ -113,7 +113,7 @@ func main() {
 		for {
 			resp, err = roundTrip("POST", host+path, hostHeader, nil, func(req *http.Request) {})
 			time.Sleep(*sleep)
-			if err != nil || resp.StatusCode == 303 {
+			if err != nil || resp.StatusCode == http.StatusSeeOther {
 				break
 			}
 		}
@@ -127,7 +127,7 @@ func main() {
 				req.Header.Set("Content-Type", "application/x-www-form-urlencoded")
 			})
 			time.Sleep(*sleep)
-			if err != nil || resp.StatusCode == 303 {
+			if err != nil || resp.StatusCode == http.StatusSeeOther {
 				break
 			}
 		}

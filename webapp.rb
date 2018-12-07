@@ -66,12 +66,14 @@ end
 
 # delete author
 post '/authors/:id/delete' do
-  if Author.delete(params[:id])
-    flash[:notice] = "Author deleted"
-  else
-    flash[:error] = "Failed to delete author"
+  rescue_not_found do
+    if Author.delete(params[:id])
+      flash[:notice] = "Author deleted"
+    else
+      flash[:error] = "Failed to delete author"
+    end
+    redirect to("/")
   end
-  redirect to("/")
 end
 
 # show book
@@ -119,12 +121,14 @@ end
 
 # delete book
 post '/books/:id/delete' do
-  if Book.delete(params[:id])
-    flash[:notice] = "Book deleted"
-  else
-    flash[:error] = "Failed to delete book"
+  rescue_not_found do
+    if Book.delete(params[:id])
+      flash[:notice] = "Book deleted"
+    else
+      flash[:error] = "Failed to delete book"
+    end
+    redirect to("/")
   end
-  redirect to("/")
 end
 
 get '/reset' do
