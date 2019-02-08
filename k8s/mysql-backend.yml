@@ -67,7 +67,7 @@ spec:
     spec:
       containers:
       - name: mysql-init
-        image: buoyantio/booksapp:v0.0.2
+        image: buoyantio/booksapp:v0.0.3
         env:
         - name: DATABASE_URL
           value: mysql2://booksapp:booksapp@mysql:3306/booksapp_production
