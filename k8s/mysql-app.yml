@@ -25,7 +25,7 @@ spec:
       dnsPolicy: ClusterFirst
       containers:
       - name: service
-        image: buoyantio/booksapp:v0.0.2
+        image: buoyantio/booksapp:v0.0.3
         env:
         - name: DATABASE_URL
           value: mysql2://booksapp:booksapp@mysql:3306/booksapp_production
@@ -68,7 +68,7 @@ spec:
       dnsPolicy: ClusterFirst
       containers:
       - name: service
-        image: buoyantio/booksapp:v0.0.2
+        image: buoyantio/booksapp:v0.0.3
         env:
         - name: DATABASE_URL
           value: mysql2://booksapp:booksapp@mysql:3306/booksapp_production
@@ -111,7 +111,7 @@ spec:
       dnsPolicy: ClusterFirst
       containers:
       - name: service
-        image: buoyantio/booksapp:v0.0.2
+        image: buoyantio/booksapp:v0.0.3
         env:
         - name: DATABASE_URL
           value: mysql2://booksapp:booksapp@mysql:3306/booksapp_production
@@ -140,6 +140,6 @@ spec:
       dnsPolicy: ClusterFirst
       containers:
       - name: traffic
-        image: buoyantio/booksapp-traffic:v0.0.2
+        image: buoyantio/booksapp-traffic:v0.0.3
         args:
         - "webapp:7000"

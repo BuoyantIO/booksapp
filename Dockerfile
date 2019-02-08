@@ -1,4 +1,4 @@
-FROM ruby:2.3-alpine3.7
+FROM ruby:2.3.8-alpine3.8
 
 RUN apk add --update \
     alpine-sdk \
