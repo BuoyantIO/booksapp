@@ -1,0 +1,57 @@
+syntax = "proto3";
+
+package proto;
+
+message Book {
+  int32 id = 1;
+  string title = 2;
+  int32 pages = 3;
+  int32 author_id = 4;
+}
+
+message GetBookRequest {
+  int32 book_id = 1;
+}
+
+message GetBookResponse {
+  Book book = 1;
+}
+
+message GetBooksRequest {
+  int32 author_id = 1;
+  string order = 2;
+}
+
+message GetBooksResponse {
+  repeated Book books = 1;
+}
+
+message CreateBookRequest {
+  string title = 1;
+  int32 pages = 2;
+  int32 author_id = 3;
+}
+
+message CreateBookResponse {
+  Book book = 1;
+}
+
+message UpdateBookRequest {
+  Book book = 1;
+}
+
+message UpdateBookResponse {}
+
+message DeleteBookRequest {
+  int32 book_id = 1;
+}
+
+message DeleteBookResponse {}
+
+service Books {
+  rpc GetBook(GetBookRequest) returns (GetBookResponse);
+  rpc GetBooks(GetBooksRequest) returns (GetBooksResponse);
+  rpc CreateBook(CreateBookRequest) returns (CreateBookResponse);
+  rpc UpdateBook(UpdateBookRequest) returns (UpdateBookResponse);
+  rpc DeleteBook(DeleteBookRequest) returns (DeleteBookResponse);
+}

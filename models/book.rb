@@ -1,4 +1,5 @@
 require 'sinatra/activerecord'
+require_relative '../resources/author'
 
 class Book < ActiveRecord::Base
   validates_presence_of :title, :pages

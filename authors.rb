@@ -3,7 +3,6 @@ require 'sinatra/json'
 
 require_relative 'ext/failure_rate'
 require_relative 'models/author'
-require_relative 'resources/book'
 
 get '/authors.json' do
   authors = Author.where(params.slice(*Author.attribute_names)).order(params[:order])

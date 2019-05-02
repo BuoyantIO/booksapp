@@ -1,4 +1,5 @@
 require 'sinatra/activerecord'
+require_relative '../resources/book'
 
 class Author < ActiveRecord::Base
   validates_presence_of :first_name, :last_name
@@ -10,7 +11,7 @@ class Author < ActiveRecord::Base
   private
 
   def destroy_books
-    Book.find(:all, :params => {:author_id => id}).each do |book|
+    Book.all(:params => {:author_id => id}).each do |book|
       book.destroy
     end
   end
