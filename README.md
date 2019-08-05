@@ -23,9 +23,9 @@ You can deploy the application to Kubernetes using the Linkerd 2.0 service mesh.
 
 1. Install the `linkerd` CLI
 
-```bash
-curl https://run.linkerd.io/install | sh
-```
+   ```bash
+   curl https://run.linkerd.io/install | sh
+   ```
 
 2. Install the Linkerd control plane
 
