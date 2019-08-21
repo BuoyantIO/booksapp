@@ -1,0 +1,337 @@
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: mysql
+  labels:
+    app: mysql
+    project: booksapp
+spec:
+  ports:
+  - port: 3306
+  selector:
+    app: mysql
+  clusterIP: None
+---
+apiVersion: apps/v1beta2
+kind: Deployment
+metadata:
+  name: mysql
+  labels:
+    app: mysql
+    project: booksapp
+spec:
+  selector:
+    matchLabels:
+      app: mysql
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      annotations:
+        linkerd.io/inject: enabled
+      labels:
+        app: mysql
+        project: booksapp
+    spec:
+      containers:
+      - name: mysql
+        image: mysql:5.6
+        env:
+        - name: MYSQL_ROOT_PASSWORD
+          value: password
+        - name: MYSQL_DATABASE
+          value: booksapp_production
+        - name: MYSQL_USER
+          value: booksapp
+        - name: MYSQL_PASSWORD
+          value: booksapp
+        - name: MYSQL_INITDB_SKIP_TZINFO
+          value: "1"
+        ports:
+        - containerPort: 3306
+          name: mysql
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: mysql-init
+  labels:
+    app: mysql-init
+    project: booksapp
+spec:
+  template:
+    metadata:
+      name: mysql-init
+      annotations:
+        linkerd.io/inject: enabled
+      labels:
+        app: mysql-init
+        project: booksapp
+    spec:
+      containers:
+      - name: mysql-init
+        image: buoyantio/booksapp:v0.0.3
+        env:
+        - name: DATABASE_URL
+          value: mysql2://booksapp:booksapp@mysql:3306/booksapp_production
+        command:
+        - "/bin/sh"
+        args:
+        - "-c"
+        - |
+          set -e
+          bundle exec rake db:ready
+          bundle exec rake db:migrate
+          bundle exec rake db:seed
+      restartPolicy: OnFailure
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: webapp
+  labels:
+    app: webapp
+    project: booksapp
+spec:
+  selector:
+    app: webapp
+  type: LoadBalancer
+  ports:
+  - name: service
+    port: 7000
+---
+kind: Deployment
+apiVersion: extensions/v1beta1
+metadata:
+  name: webapp
+  labels:
+    app: webapp
+    project: booksapp
+spec:
+  replicas: 1
+  template:
+    metadata:
+      annotations:
+        linkerd.io/inject: enabled
+      labels:
+        app: webapp
+        project: booksapp
+    spec:
+      dnsPolicy: ClusterFirst
+      containers:
+      - name: service
+        image: buoyantio/booksapp:v0.0.3
+        env:
+        - name: DATABASE_URL
+          value: mysql2://booksapp:booksapp@mysql:3306/booksapp_production
+        - name: AUTHORS_SITE
+          value: http://authors:7001
+        - name: BOOKS_SITE
+          value: http://books:7002
+        args: ["prod:webapp"]
+        readinessProbe:
+          httpGet:
+            path: /ping
+            port: 7000
+        ports:
+        - name: service
+          containerPort: 7000
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: authors
+  labels:
+    app: authors
+    project: booksapp
+spec:
+  selector:
+    app: authors
+  clusterIP: None
+  ports:
+  - name: service
+    port: 7001
+---
+kind: Deployment
+apiVersion: extensions/v1beta1
+metadata:
+  name: authors
+  labels:
+    app: authors
+    project: booksapp
+spec:
+  replicas: 1
+  template:
+    metadata:
+      annotations:
+        linkerd.io/inject: enabled
+      labels:
+        app: authors
+        project: booksapp
+    spec:
+      dnsPolicy: ClusterFirst
+      containers:
+      - name: service
+        image: buoyantio/booksapp:v0.0.3
+        env:
+        - name: DATABASE_URL
+          value: mysql2://booksapp:booksapp@mysql:3306/booksapp_production
+        - name: BOOKS_SITE
+          value: http://books:7002
+        args: ["prod:authors"]
+        readinessProbe:
+          httpGet:
+            path: /ping
+            port: 7001
+        ports:
+        - name: service
+          containerPort: 7001
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: books
+  labels:
+    app: books
+    project: booksapp
+spec:
+  selector:
+    app: books
+  clusterIP: None
+  ports:
+  - name: service
+    port: 7002
+---
+kind: Deployment
+apiVersion: extensions/v1beta1
+metadata:
+  name: books
+  labels:
+    app: books
+    project: booksapp
+spec:
+  replicas: 1
+  template:
+    metadata:
+      annotations:
+        linkerd.io/inject: enabled
+      labels:
+        app: books
+        project: booksapp
+    spec:
+      dnsPolicy: ClusterFirst
+      containers:
+      - name: service
+        image: buoyantio/booksapp:v0.0.3
+        env:
+        - name: DATABASE_URL
+          value: mysql2://booksapp:booksapp@mysql:3306/booksapp_production
+        - name: AUTHORS_SITE
+          value: http://authors:7001
+        args: ["prod:books"]
+        readinessProbe:
+          httpGet:
+            path: /ping
+            port: 7002
+        ports:
+        - name: service
+          containerPort: 7002
+---
+kind: Deployment
+apiVersion: extensions/v1beta1
+metadata:
+  name: traffic
+  labels:
+    app: traffic
+    project: booksapp
+spec:
+  replicas: 1
+  template:
+    metadata:
+      annotations:
+        linkerd.io/inject: enabled
+      labels:
+        app: traffic
+        project: booksapp
+    spec:
+      dnsPolicy: ClusterFirst
+      containers:
+      - name: traffic
+        image: buoyantio/booksapp-traffic:v0.0.3
+        args:
+        - "webapp:7000"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: authors-clone
+  labels:
+    app: authors-clone
+    project: booksapp
+spec:
+  selector:
+    app: authors-clone
+  clusterIP: None
+  ports:
+  - name: service
+    port: 7009
+---
+kind: Deployment
+apiVersion: extensions/v1beta1
+metadata:
+  name: authors-clone
+  labels:
+    app: authors-clone
+    project: booksapp
+spec:
+  replicas: 1
+  template:
+    metadata:
+      annotations:
+        linkerd.io/inject: enabled
+      labels:
+        app: authors-clone
+        project: booksapp
+    spec:
+      dnsPolicy: ClusterFirst
+      containers:
+      - name: service
+        image: buoyantio/booksapp:v0.0.3
+        env:
+        - name: DATABASE_URL
+          value: mysql2://booksapp:booksapp@mysql:3306/booksapp_production
+        - name: BOOKS_SITE
+          value: http://books:7002
+        args: ["prod:authors"]
+        readinessProbe:
+          httpGet:
+            path: /ping
+            port: 7001
+        ports:
+        - name: service
+          containerPort: 7009
+---
+apiVersion: split.smi-spec.io/v1alpha1
+kind: TrafficSplit
+metadata:
+  name: authors-split
+spec:
+  service: authors
+  backends:
+  - service: authors
+    weight: 500m
+  - service: authors-clone
+    weight: 500m
+---
+apiVersion: split.smi-spec.io/v1alpha1
+kind: TrafficSplit
+metadata:
+  name: webapp-split
+spec:
+  service: webapp
+  backends:
+  - service: webapp
+    weight: 1000m
+  - service: webapp-clone
+    weight: 0m
