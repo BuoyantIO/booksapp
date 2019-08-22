@@ -109,7 +109,7 @@ metadata:
     app: webapp
     project: booksapp
 spec:
-  replicas: 1
+  replicas: 3
   template:
     metadata:
       annotations:
@@ -161,7 +161,7 @@ metadata:
     app: authors
     project: booksapp
 spec:
-  replicas: 1
+  replicas: 3
   template:
     metadata:
       annotations:
@@ -211,7 +211,7 @@ metadata:
     app: books
     project: booksapp
 spec:
-  replicas: 1
+  replicas: 3
   template:
     metadata:
       annotations:
@@ -285,7 +285,7 @@ metadata:
     app: authors-clone
     project: booksapp
 spec:
-  replicas: 1
+  replicas: 3
   template:
     metadata:
       annotations:
