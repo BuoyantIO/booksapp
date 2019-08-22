@@ -128,6 +128,49 @@ You can then view route data for each service:
     linkerd routes authors
     ```
 
+---
+
+## Traffic Splits
+
+You can use a modified version of booksapp to demo a trafficsplit.
+
+1. Install `booksapp-trafficsplit.yml` which includes the MySQL backend, a
+   modified version of booksapp.yml that does not introduce a FAILURE_RATE, a
+   second `authors` service called `authors-clone`, and two trafficsplits.
+   Linkerd has already been injected into booksapp and `authors-clone`.
+
+    ```bash
+    kubectl apply -f booksapp-trafficsplit.yml
+    ```
+
+2. Verify that two trafficsplits now exist in the `default` namespace.
+
+    ```bash
+    kubectl get ts
+    ```
+
+3. Give the app 1-2 minutes to begin sending traffic.
+
+4. Run `watch linkerd stat ts` to verify that the trafficsplits are working. You
+   should see the below results -- one trafficsplit dividing traffic 50/50
+   between `authors` and `authors-clone`, one dividing traffic 100/0 between
+   `webapp` and the non-existent `webapp-clone` (You can create a split between
+   two services before the second service has been created).
+
+    ```
+    NAME            APEX      LEAF            WEIGHT   SUCCESS      RPS   LATENCY_P50   LATENCY_P95   LATENCY_P99
+    authors-split   authors   authors           500m   100.00%   3.1rps           8ms          29ms          37ms
+    authors-split   authors   authors-clone     500m   100.00%   3.5rps           8ms          23ms          37ms
+    webapp-split    webapp    webapp               1   100.00%   7.3rps          26ms          74ms          95ms
+    webapp-split    webapp    webapp-clone         0         -        -             -             -             -
+    ```
+
+5. When you are done, delete the app.
+
+    ```bash
+    kubectl delete -f booksapp-trafficsplit.yml
+    ```
+
 ## Running Locally
 
 You can also run the application locally for development.
