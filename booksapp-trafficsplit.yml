@@ -13,7 +13,7 @@ spec:
     app: mysql
   clusterIP: None
 ---
-apiVersion: apps/v1beta2
+apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: mysql
@@ -24,6 +24,7 @@ spec:
   selector:
     matchLabels:
       app: mysql
+      project: booksapp
   strategy:
     type: Recreate
   template:
@@ -102,7 +103,7 @@ spec:
     port: 7000
 ---
 kind: Deployment
-apiVersion: extensions/v1beta1
+apiVersion: apps/v1
 metadata:
   name: webapp
   labels:
@@ -110,6 +111,10 @@ metadata:
     project: booksapp
 spec:
   replicas: 3
+  selector:
+    matchLabels:
+      app: webapp
+      project: booksapp
   template:
     metadata:
       annotations:
@@ -154,13 +159,17 @@ spec:
     port: 7001
 ---
 kind: Deployment
-apiVersion: extensions/v1beta1
+apiVersion: apps/v1
 metadata:
   name: authors
   labels:
     app: authors
     project: booksapp
 spec:
+  selector:
+    matchLabels:
+      app: authors
+      project: booksapp
   replicas: 3
   template:
     metadata:
@@ -204,13 +213,17 @@ spec:
     port: 7002
 ---
 kind: Deployment
-apiVersion: extensions/v1beta1
+apiVersion: apps/v1
 metadata:
   name: books
   labels:
     app: books
     project: booksapp
 spec:
+  selector:
+    matchLabels:
+      app: books
+      project: booksapp
   replicas: 3
   template:
     metadata:
@@ -239,13 +252,17 @@ spec:
           containerPort: 7002
 ---
 kind: Deployment
-apiVersion: extensions/v1beta1
+apiVersion: apps/v1
 metadata:
   name: traffic
   labels:
     app: traffic
     project: booksapp
 spec:
+  selector:
+    matchLabels:
+      app: traffic
+      project: booksapp
   replicas: 1
   template:
     metadata:
@@ -278,13 +295,17 @@ spec:
     port: 7009
 ---
 kind: Deployment
-apiVersion: extensions/v1beta1
+apiVersion: apps/v1
 metadata:
   name: authors-clone
   labels:
     app: authors-clone
     project: booksapp
 spec:
+  selector:
+    matchLabels:
+      app: authors-clone
+      project: booksapp
   replicas: 3
   template:
     metadata:
