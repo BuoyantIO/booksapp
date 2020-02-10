@@ -15,14 +15,19 @@ spec:
     port: 7000
 ---
 kind: Deployment
-apiVersion: extensions/v1beta1
+apiVersion: apps/v1
 metadata:
   name: webapp
   labels:
     app: webapp
     project: booksapp
+    app.kubernetes.io/part-of: booksapp
 spec:
   replicas: 3
+  selector:
+    matchLabels:
+      app: webapp
+      project: booksapp
   template:
     metadata:
       labels:
@@ -65,14 +70,19 @@ spec:
     port: 7001
 ---
 kind: Deployment
-apiVersion: extensions/v1beta1
+apiVersion: apps/v1
 metadata:
   name: authors
   labels:
     app: authors
     project: booksapp
+    app.kubernetes.io/part-of: booksapp
 spec:
   replicas: 1
+  selector:
+    matchLabels:
+      app: authors
+      project: booksapp
   template:
     metadata:
       labels:
@@ -115,14 +125,19 @@ spec:
     port: 7002
 ---
 kind: Deployment
-apiVersion: extensions/v1beta1
+apiVersion: apps/v1
 metadata:
   name: books
   labels:
     app: books
     project: booksapp
+    app.kubernetes.io/part-of: booksapp
 spec:
   replicas: 1
+  selector:
+    matchLabels:
+      app: books
+      project: booksapp
   template:
     metadata:
       labels:
@@ -148,14 +163,19 @@ spec:
           containerPort: 7002
 ---
 kind: Deployment
-apiVersion: extensions/v1beta1
+apiVersion: apps/v1
 metadata:
   name: traffic
   labels:
     app: traffic
     project: booksapp
+    app.kubernetes.io/part-of: booksapp
 spec:
   replicas: 1
+  selector:
+    matchLabels:
+      app: traffic
+      project: booksapp
   template:
     metadata:
       labels:

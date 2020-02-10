@@ -20,6 +20,7 @@ metadata:
   labels:
     app: mysql
     project: booksapp
+    app.kubernetes.io/part-of: booksapp
 spec:
   selector:
     matchLabels:
@@ -109,6 +110,7 @@ metadata:
   labels:
     app: webapp
     project: booksapp
+    app.kubernetes.io/part-of: booksapp
 spec:
   replicas: 3
   selector:
@@ -165,6 +167,7 @@ metadata:
   labels:
     app: authors
     project: booksapp
+    app.kubernetes.io/part-of: booksapp
 spec:
   selector:
     matchLabels:
@@ -219,6 +222,7 @@ metadata:
   labels:
     app: books
     project: booksapp
+    app.kubernetes.io/part-of: booksapp
 spec:
   selector:
     matchLabels:
@@ -258,6 +262,7 @@ metadata:
   labels:
     app: traffic
     project: booksapp
+    app.kubernetes.io/part-of: booksapp
 spec:
   selector:
     matchLabels:
@@ -301,6 +306,7 @@ metadata:
   labels:
     app: authors-clone
     project: booksapp
+    app.kubernetes.io/part-of: booksapp
 spec:
   selector:
     matchLabels:

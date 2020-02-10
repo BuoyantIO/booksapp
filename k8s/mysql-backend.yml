@@ -20,6 +20,7 @@ metadata:
   labels:
     app: mysql
     project: booksapp
+    app.kubernetes.io/part-of: booksapp
 spec:
   selector:
     matchLabels:

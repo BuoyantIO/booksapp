@@ -64,6 +64,7 @@ metadata:
   labels:
     app: chaos
     project: booksapp
+    app.kubernetes.io/part-of: booksapp
 spec:
   replicas: 1
   template:
