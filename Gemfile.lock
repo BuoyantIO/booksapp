@@ -1,64 +1,70 @@
+GIT
+  remote: https://github.com/sinatra/sinatra.git
+  revision: 91477e6dad7c9d8eb1c358e47b9d83b73d626f84
+  specs:
+    rack-protection (2.1.0)
+      rack
+    sinatra (2.1.0)
+      mustermann (~> 1.0)
+      rack (~> 2.2)
+      rack-protection (= 2.1.0)
+      tilt (~> 2.0)
+    sinatra-contrib (2.1.0)
+      multi_json
+      mustermann (~> 1.0)
+      rack-protection (= 2.1.0)
+      sinatra (= 2.1.0)
+      tilt (~> 2.0)
+
 GEM
   remote: https://rubygems.org/
   specs:
-    activemodel (4.2.11)
-      activesupport (= 4.2.11)
+    activemodel (6.0.3.1)
+      activesupport (= 6.0.3.1)
+    activemodel-serializers-xml (1.0.2)
+      activemodel (> 5.x)
+      activesupport (> 5.x)
       builder (~> 3.1)
-    activerecord (4.2.11)
-      activemodel (= 4.2.11)
-      activesupport (= 4.2.11)
-      arel (~> 6.0)
-    activeresource (4.1.0)
-      activemodel (~> 4.0)
-      activesupport (~> 4.0)
-      rails-observers (~> 0.1.2)
+    activerecord (6.0.3.1)
+      activemodel (= 6.0.3.1)
+      activesupport (= 6.0.3.1)
+    activeresource (5.1.1)
+      activemodel (>= 5.0, < 7)
+      activemodel-serializers-xml (~> 1.0)
+      activesupport (>= 5.0, < 7)
     activeresource-persistent (0.2.0)
       activeresource (>= 2.3.0)
       net-http-persistent (>= 2.5)
-    activesupport (4.2.11)
-      i18n (~> 0.7)
+    activesupport (6.0.3.1)
+      concurrent-ruby (~> 1.0, >= 1.0.2)
+      i18n (>= 0.7, < 2)
       minitest (~> 5.1)
-      thread_safe (~> 0.3, >= 0.3.4)
       tzinfo (~> 1.1)
-    arel (6.0.4)
-    backports (3.11.4)
-    builder (3.2.3)
-    concurrent-ruby (1.1.4)
-    i18n (0.9.5)
+      zeitwerk (~> 2.2, >= 2.2.2)
+    builder (3.2.4)
+    concurrent-ruby (1.1.6)
+    i18n (1.8.2)
       concurrent-ruby (~> 1.0)
-    minitest (5.11.3)
-    multi_json (1.13.1)
-    mysql2 (0.5.2)
+    minitest (5.14.1)
+    multi_json (1.14.1)
+    mustermann (1.1.1)
+      ruby2_keywords (~> 0.0.1)
+    mysql2 (0.5.3)
     net-http-persistent (2.9.4)
-    rack (1.6.13)
+    rack (2.2.2)
     rack-flash3 (1.0.5)
       rack
-    rack-protection (1.5.5)
-      rack
-    rack-test (0.7.0)
-      rack (>= 1.0, < 3)
-    rails-observers (0.1.2)
-      activemodel (~> 4.0)
-    rake (12.3.3)
-    sinatra (1.4.8)
-      rack (~> 1.5)
-      rack-protection (~> 1.4)
-      tilt (>= 1.3, < 3)
-    sinatra-activerecord (2.0.13)
-      activerecord (>= 3.2)
+    rake (13.0.1)
+    ruby2_keywords (0.0.2)
+    sinatra-activerecord (2.0.18)
+      activerecord (>= 4.1)
       sinatra (>= 1.0)
-    sinatra-contrib (1.4.7)
-      backports (>= 2.0)
-      multi_json
-      rack-protection
-      rack-test
-      sinatra (~> 1.4.0)
-      tilt (>= 1.3, < 3)
-    sqlite3 (1.3.13)
+    sqlite3 (1.4.2)
     thread_safe (0.3.6)
-    tilt (2.0.9)
-    tzinfo (1.2.5)
+    tilt (2.0.10)
+    tzinfo (1.2.7)
       thread_safe (~> 0.1)
+    zeitwerk (2.3.0)
 
 PLATFORMS
   ruby
@@ -72,8 +78,8 @@ DEPENDENCIES
   rake
   sinatra
   sinatra-activerecord
-  sinatra-contrib
-  sqlite3 (~> 1.3.6)
+  sinatra-contrib!
+  sqlite3 (~> 1.4.2)
 
 BUNDLED WITH
-   1.17.1
+   2.1.1
