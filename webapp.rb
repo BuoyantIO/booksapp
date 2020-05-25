@@ -1,5 +1,6 @@
 require 'sinatra'
 require 'sinatra/base'
+require 'sinatra/activerecord'
 require 'rack-flash'
 
 enable :sessions
