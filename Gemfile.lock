@@ -40,6 +40,7 @@ GEM
     concurrent-ruby (1.1.8)
     i18n (1.8.9)
       concurrent-ruby (~> 1.0)
+    mini_portile2 (2.8.9)
     minitest (5.14.4)
     multi_json (1.14.1)
     mustermann (1.1.1)
@@ -59,7 +60,8 @@ GEM
     sinatra-activerecord (2.0.18)
       activerecord (>= 4.1)
       sinatra (>= 1.0)
-    sqlite3 (1.4.2)
+    sqlite3 (2.9.6)
+      mini_portile2 (~> 2.8.0)
     tilt (2.0.10)
     tzinfo (2.0.4)
       concurrent-ruby (~> 1.0)
@@ -78,7 +80,7 @@ DEPENDENCIES
   sinatra
   sinatra-activerecord
   sinatra-contrib!
-  sqlite3 (~> 1.4.2)
+  sqlite3 (~> 2.9.6)
 
 BUNDLED WITH
    2.1.1
